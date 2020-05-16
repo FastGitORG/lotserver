@@ -18,28 +18,30 @@ chmod +x tcp.sh
 ./tcp.sh
 ```
 
+**Reboot** your VM
+
 Then install lotserver
 
 ```bash
 bash <(wget --no-check-certificate -qO- https://github.com/fastgitorg/lotserver/raw/master/Install.sh) install
 ```
 
-### Select own kernel
+Install with selected own kernel
 
 ```bash
 bash <(wget --no-check-certificate -qO- https://github.com/fastgitorg/lotserver/raw/master/Install.sh) install <Kernel Version>
 ```
 
-## Full uninstall
+Uninstall completely
 
 ```bash
 bash <(wget --no-check-certificate -qO- https://github.com/fastgitorg/lotserver/raw/master/Install.sh) uninstall
 ```
 
-## 许可证生成 --> [萌咖 API接口](https://moeclub.org/api)
+## License generator --> [MoeClub API](https://moeclub.org/api)
 
-### 如果无法生成许可证,可能API正在被无聊的人攻击
+### If license generate failed, that someone is attacking API
 
-## [更新历史](http://download.appexnetworks.com.cn/releaseNotes/)
+## [Changelog](http://download.appexnetworks.com.cn/releaseNotes/)
 
-All files are from MoeClub.
+All files are from MoeClub & tcp.sh.
