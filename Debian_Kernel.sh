@@ -1,5 +1,7 @@
 #!/bin/bash
 
+echo "[+] Install Kernel"
+
 deb_issue="$(cat /etc/issue)"
 deb_relese="$(echo $deb_issue |grep -io 'Ubuntu\|Debian' |sed -r 's/(.*)/\L\1/')"
 os_ver="$(dpkg --print-architecture)"
@@ -76,6 +78,8 @@ if [ $? -ne 0 ]; then
 else
   exit 1
 fi
+
+echo "[-] Remove useless kernel, step 1"
 while true; do
   List_Kernel="$(dpkg -l |grep 'linux-image\|linux-modules\|linux-generic\|linux-headers' |grep -v "$item")"
   Num_Kernel="$(echo "$List_Kernel" |sed '/^$/d' |wc -l)"
@@ -92,4 +96,25 @@ while true; do
 apt-get autoremove -y
 [ -d '/var/lib/apt/lists' ] && find /var/lib/apt/lists -type f -delete
 
-echo "Finished!"
+echo "[-] Remove useless kernel, step 2"
+
+kernel_version="3.16.0-4"
+
+deb_total=`dpkg -l | grep linux-image | awk '{print $2}' | grep -v "${kernel_version}" | wc -l`
+if [ "${deb_total}" > "1" ]; then
+	echo -e "[+] Detected ${deb_total} kernels, start to remove..."
+	for((integer = 1; integer <= ${deb_total}; integer++)); do
+		deb_del=`dpkg -l|grep linux-image | awk '{print $2}' | grep -v "${kernel_version}" | head -${integer}`
+		echo -e "[+] Start to remove ${deb_del} Kernel..."
+		apt-get purge -y ${deb_del}
+		echo -e "${deb_del} kernel removed..."
+	done
+	echo -e "[+] Kernel remove finished..."
+else
+	echo -e "[!] Number of Kernel wrong! Please check manually!" && exit 1
+fi
+
+echo "[+] Update grub"
+/usr/sbin/update-grub
+
+echo "[x] Lotserver install finished! Please reboot manually!"
